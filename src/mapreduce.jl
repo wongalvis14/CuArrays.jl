@@ -98,8 +98,10 @@ function partial_mapreduce_grid(f, op, A, R, neutral, Rreduce, Rother, gridDim_r
     val = neutral
     for i in 0:reduce_per_thread-1
         ireduce++
+        @cuprintln "thread $(threadIdx().x) block $(blockIdx().x): $(ireduce) $(val)"
         val = op(val, R[ireduce])
     end
+    @cuprintln "thread $(threadIdx().x) block $(blockIdx().x): $(val)"
                 
     # @cuprintln "thread $(threadIdx().x) block $(blockIdx().x): $(Rreduce) $(blockIdx_reduce) $(blockIdx_other)"
     # block-based indexing into the values outside of the reduction dimension
